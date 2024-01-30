@@ -10,7 +10,7 @@ class Item < ApplicationRecord
 
   validates :item_name, :content, :category_id, :condition_id, :shipping_fee_id, :area_id, :shipping_to_date_id, :price, :image, presence: true
   validates :category_id, :condition_id, :shipping_fee_id, :area_id, :shipping_to_date_id, numericality: { other_than: 1, message: "can't be blank" }
-  validates :price, numericality: { greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999, message: '半角数字を使用してください' },
+  validates :price, numericality: { greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999},
                     format: { with: /\A[0-9]+\z/ }
 
 end
