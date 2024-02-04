@@ -28,6 +28,12 @@ RSpec.describe OrderAddress, type: :model do
         expect(@order_address.errors.full_messages).to include("Area can't be blank")
       end
 
+      it 'idが1だと登録できない' do
+        @order_address.area_id = 1
+        @order_address.valid?
+        expect(@order_address.errors.full_messages).to include("Area can't be blank")
+      end  
+
       it '市区町村が空では登録できない' do
         @order_address.city = ''
         @order_address.valid?
@@ -46,8 +52,20 @@ RSpec.describe OrderAddress, type: :model do
         expect(@order_address.errors.full_messages).to include("Tel can't be blank")
       end
 
-      it '電話番号が10桁以上11桁以内の半角数値ではないと登録できない' do
+      it '電話番号が半角数字以外が含まれている場合は購入できない' do
         @order_address.tel = '０９０１２'
+        @order_address.valid?
+        expect(@order_address.errors.full_messages).to include("Tel is invalid")
+      end
+
+      it '9桁以下だと購入できない' do
+        @order_address.tel = '090'
+        @order_address.valid?
+        expect(@order_address.errors.full_messages).to include("Tel is invalid")
+      end
+
+      it '12桁以上だと購入できない' do
+        @order_address.tel = '090123456789'
         @order_address.valid?
         expect(@order_address.errors.full_messages).to include("Tel is invalid")
       end
@@ -75,6 +93,11 @@ RSpec.describe OrderAddress, type: :model do
       it '適切なデータが存在すれば登録できる' do
         expect(@order_address).to be_valid
       end
+
+      it '建物名がからでも購入できる' do
+        @order_address.building = nil
+        expect(@order_address).to be_valid
+      end  
     end
   end
 end
